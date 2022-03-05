@@ -16,7 +16,7 @@ void AmyTrain::BeginPlay()
 {
 	Super::BeginPlay();
 	AActor * Train = GetOwner();
-
+	
 }
 
 // Called every frame
