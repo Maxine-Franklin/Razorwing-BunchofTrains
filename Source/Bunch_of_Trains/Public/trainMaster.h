@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "trainLogic.generated.h"
+#include "trainMaster.generated.h"
 
 UCLASS()
-class BUNCH_OF_TRAINS_API AtrainLogic : public AActor
+class BUNCH_OF_TRAINS_API AtrainMaster : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AtrainLogic();
+	AtrainMaster();
 	UPROPERTY(EditAnywhere)
 		UStaticMesh* Train; //Static mesh used for the train model
 
