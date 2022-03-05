@@ -14,7 +14,7 @@ class BUNCH_OF_TRAINS_API AmyTrain : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AmyTrain();
-	UStaticMeshComponent* Mesh;
+	UStaticMeshComponent* myMesh;
 
 protected:
 	// Called when the game starts or when spawned
