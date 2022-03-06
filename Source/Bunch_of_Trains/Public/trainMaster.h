@@ -16,6 +16,13 @@ public:
 	AtrainMaster();
 	UPROPERTY(EditAnywhere)
 		UStaticMesh* Train; //Static mesh used for the train model
+	UPROPERTY(EditAnywhere, Category = "TrainStart")
+		TArray<UStaticMesh*> LaneStarts;
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		/// -+1 = -+x, -+2 = -+y, -+3 = -+z
+		int forwardDirection;
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		AActor* Player;
 
 protected:
 	// Called when the game starts or when spawned
@@ -27,5 +34,6 @@ public:
 
 private:
 	void SpawnTrain(FTransform Trans, float Velocity, bool Active = 1);
+	UStaticMeshComponent* myMesh;
 
 };
