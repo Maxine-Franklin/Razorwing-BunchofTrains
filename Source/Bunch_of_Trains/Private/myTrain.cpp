@@ -25,11 +25,16 @@ AmyTrain::AmyTrain()
 		myMesh->SetEnableGravity(true);
 		//myMesh->AddImpulse(FVector(1.0f, 0.0f, 0.0f));
 	}
+	lockedAxis = "z";
+	lockedAxisVal = GetLockedAxis(lockedAxis);
 }
 
-AmyTrain::AmyTrain(float vel)
+AmyTrain::AmyTrain(float vel, FString VerticalAxis)
 {
 	Velocity = vel;
+	lockedAxis = VerticalAxis;
+	lockedAxisVal = GetLockedAxis(lockedAxis);
+	//LockedAxis
 }
 
 // Called when the game starts or when spawned
@@ -44,6 +49,27 @@ void AmyTrain::BeginPlay()
 void AmyTrain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	myMesh->AddImpulse(FVector(-Velocity, 0.0f, 0.0f) * myMesh->GetMass());
+	if (GetLockedAxis(lockedAxis) > lockedAxisVal + 500.0f || GetLockedAxis(lockedAxis) < lockedAxisVal - 250.0f)
+	{
+		myMesh->AddImpulse(FVector(-Velocity, 0.0f, -4.9f) * myMesh->GetMass());
+	}
+	else if (GetLockedAxis(lockedAxis) > lockedAxisVal + 1000.0f || GetLockedAxis(lockedAxis) < lockedAxisVal - 500.0f)
+	{ myMesh->AddImpulse(FVector(-Velocity, 0.0f, -9.8f) * myMesh->GetMass()); }
+	else { myMesh->AddImpulse(FVector(-Velocity, 0.0f, 0.0f) * myMesh->GetMass()); }
 }
 
+float AmyTrain::GetLockedAxis(FString Axis)
+{
+	if (Axis == "z")
+	{
+		return GetActorLocation().Z;
+	}
+	else if (Axis == "y")
+	{
+		return GetActorLocation().Y;
+	}
+	else
+	{
+		return GetActorLocation().X;
+	}
+}
