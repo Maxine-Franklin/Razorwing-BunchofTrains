@@ -8,35 +8,24 @@ AmyTrain::AmyTrain()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Velocity = 10.0f;
+	Velocity = 0.0f;
 	forwardDirection = -1;
 
 	//Set's up the actor's mesh
-	/*UStaticMeshComponent* */myMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("trainMesh"));
-	myMesh->SetupAttachment(RootComponent);
+	SetupMesh(FVector(0.0f, 0.0f, 0.0f));
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> myMeshFinder(TEXT("/Game/Bunch_of_Trains/Meshes/Train.Train")); //Obtains the static mesh from the content browser
-	if (myMeshFinder.Succeeded()) //If mesh exists, then...
-	{
-		myMesh->SetStaticMesh(myMeshFinder.Object); //Applies mesh
-		//Adjusts mesh properties
-		myMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
-		myMesh->SetWorldScale3D(FVector(1.f));
-		myMesh->SetSimulatePhysics(true);
-		BlockAxis(forwardDirection);
-		//myMesh->SetEnableGravity(true);
-		//myMesh->AddImpulse(FVector(1.0f, 0.0f, 0.0f));
-	}
 	lockedAxis = 3;
-	lockedAxisVal = GetLockedAxis(lockedAxis);
+	//lockedAxisVal = GetLockedAxis(lockedAxis);
 }
 
-AmyTrain::AmyTrain(float vel, int VerticalAxis, int Forward)
+//AmyTrain::AmyTrain(float vel, /*int verticalAxis,*/ int forward, FVector pos)
+AmyTrain::AmyTrain(float vel, int forward, FVector pos)
 {
 	Velocity = vel;
-	lockedAxis = VerticalAxis;
-	forwardDirection = Forward;
-	BlockAxis(Forward);
+	//lockedAxis = verticalAxis;
+	forwardDirection = forward;
+	SetupMesh(pos);
+	BlockAxis(forward);
 	lockedAxisVal = GetLockedAxis(lockedAxis);
 	//LockedAxis
 }
@@ -64,6 +53,7 @@ void AmyTrain::Tick(float DeltaTime)
 	//myMesh->AddImpulse(FVector(-Velocity, 0.0f, -9.8f) * myMesh->GetMass()); }
 	//else { /* myMesh->AddImpulse(ImpulseVector(0.0f) * myMesh->GetMass()); */ 
 	//myMesh->AddImpulse(FVector(-Velocity, 0.0f, 0.0f) * myMesh->GetMass()); }
+	if (GetActorLocation().X < Player->GetActorLocation().X + 250 || GetActorLocation().X > Player->GetActorLocation().X - 250) { Velocity = 10.0f; }
 	int x = 1;
 	if (forwardDirection < 0) { x = -1; }
 	myMesh->AddImpulse(FVector(Velocity * x, Velocity * x, Velocity * x) * myMesh->GetMass());
@@ -129,6 +119,26 @@ void AmyTrain::BlockAxis(int forward)
 		myMesh->BodyInstance.bLockYTranslation = false;
 	case 3:
 		myMesh->BodyInstance.bLockZTranslation = false;
+	}
+	return;
+}
+
+void AmyTrain::SetupMesh(FVector trans)
+{
+	myMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("trainMesh"));
+	myMesh->SetupAttachment(RootComponent);
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> myMeshFinder(TEXT("/Game/Bunch_of_Trains/Meshes/Train.Train")); //Obtains the static mesh from the content browser
+	if (myMeshFinder.Succeeded()) //If mesh exists, then...
+	{
+		myMesh->SetStaticMesh(myMeshFinder.Object); //Applies mesh
+		//Adjusts mesh properties
+		myMesh->SetRelativeLocation(trans);
+		myMesh->SetWorldScale3D(FVector(1.f));
+		myMesh->SetSimulatePhysics(true);
+		BlockAxis(forwardDirection);
+		//myMesh->SetEnableGravity(true);
+		//myMesh->AddImpulse(FVector(1.0f, 0.0f, 0.0f));
 	}
 	return;
 }
