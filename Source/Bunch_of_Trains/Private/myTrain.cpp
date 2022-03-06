@@ -8,7 +8,7 @@ AmyTrain::AmyTrain()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Velocity = 10.0f;
+	Velocity = 20.0f;
 
 	//Set's up the actor's mesh
 	/*UStaticMeshComponent* */myMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("trainMesh"));
@@ -21,8 +21,8 @@ AmyTrain::AmyTrain()
 		//Adjusts mesh properties
 		myMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
 		myMesh->SetWorldScale3D(FVector(1.f));
-		//myMesh->SetSimulatePhysics(true);
-		myMesh->SetEnableGravity(false);
+		myMesh->SetSimulatePhysics(true);
+		myMesh->SetEnableGravity(true);
 		//myMesh->AddImpulse(FVector(1.0f, 0.0f, 0.0f));
 	}
 }
