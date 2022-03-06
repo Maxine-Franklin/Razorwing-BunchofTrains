@@ -9,6 +9,7 @@ AmyTrain::AmyTrain()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Velocity = 10.0f;
+	forwardDirection = -1;
 
 	//Set's up the actor's mesh
 	/*UStaticMeshComponent* */myMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("trainMesh"));
@@ -22,11 +23,7 @@ AmyTrain::AmyTrain()
 		myMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
 		myMesh->SetWorldScale3D(FVector(1.f));
 		myMesh->SetSimulatePhysics(true);
-		myMesh->BodyInstance.bLockYTranslation = true;
-		myMesh->BodyInstance.bLockZTranslation = true;
-		myMesh->BodyInstance.bLockXRotation = true;
-		myMesh->BodyInstance.bLockYRotation = true;
-		myMesh->BodyInstance.bLockZRotation = true;
+		BlockAxis(forwardDirection);
 		//myMesh->SetEnableGravity(true);
 		//myMesh->AddImpulse(FVector(1.0f, 0.0f, 0.0f));
 	}
@@ -39,6 +36,7 @@ AmyTrain::AmyTrain(float vel, int VerticalAxis, int Forward)
 	Velocity = vel;
 	lockedAxis = VerticalAxis;
 	forwardDirection = Forward;
+	BlockAxis(Forward);
 	lockedAxisVal = GetLockedAxis(lockedAxis);
 	//LockedAxis
 }
@@ -55,14 +53,20 @@ void AmyTrain::BeginPlay()
 void AmyTrain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (GetLockedAxis(lockedAxis) > lockedAxisVal + 250.0f || GetLockedAxis(lockedAxis) < lockedAxisVal - 250.0f)
+	//If there is time, get this working in stead of using axis locking
+	/*if (GetLockedAxis(lockedAxis) > lockedAxisVal + 250.0f || GetLockedAxis(lockedAxis) < lockedAxisVal - 250.0f)
 	{
 		//myMesh->AddImpulse(ImpulseVector(-4.9f) * myMesh->GetMass());
 		myMesh->AddImpulse(FVector(-Velocity, 0.0f, -4.9f) * myMesh->GetMass());
 	}
 	else if (GetLockedAxis(lockedAxis) > lockedAxisVal + 500.0f || GetLockedAxis(lockedAxis) < lockedAxisVal - 500.0f)
-	{ /*myMesh->AddImpulse(ImpulseVector(-9.8f) * myMesh->GetMass()); */ myMesh->AddImpulse(FVector(-Velocity, 0.0f, -9.8f) * myMesh->GetMass()); }
-	else { /* myMesh->AddImpulse(ImpulseVector(0.0f) * myMesh->GetMass()); */ myMesh->AddImpulse(FVector(-Velocity, 0.0f, 0.0f) * myMesh->GetMass()); }
+	{ /*myMesh->AddImpulse(ImpulseVector(-9.8f) * myMesh->GetMass());  */
+	//myMesh->AddImpulse(FVector(-Velocity, 0.0f, -9.8f) * myMesh->GetMass()); }
+	//else { /* myMesh->AddImpulse(ImpulseVector(0.0f) * myMesh->GetMass()); */ 
+	//myMesh->AddImpulse(FVector(-Velocity, 0.0f, 0.0f) * myMesh->GetMass()); }
+	int x = 1;
+	if (forwardDirection < 0) { x = -1; }
+	myMesh->AddImpulse(FVector(Velocity * x, Velocity * x, Velocity * x) * myMesh->GetMass());
 }
 
 float AmyTrain::GetLockedAxis(int Axis)
@@ -107,4 +111,24 @@ FVector AmyTrain::ImpulseVector(float Gravity)
 		rv.Z = x * Velocity;
 	}
 	return rv;
+}
+
+void AmyTrain::BlockAxis(int forward)
+{
+	myMesh->BodyInstance.bLockXTranslation = true;
+	myMesh->BodyInstance.bLockYTranslation = true;
+	myMesh->BodyInstance.bLockZTranslation = true;
+	myMesh->BodyInstance.bLockXRotation = true;
+	myMesh->BodyInstance.bLockYRotation = true;
+	myMesh->BodyInstance.bLockZRotation = true;
+	switch (abs(forward))
+	{
+	case 1:
+		myMesh->BodyInstance.bLockXTranslation = false;
+	case 2:
+		myMesh->BodyInstance.bLockYTranslation = false;
+	case 3:
+		myMesh->BodyInstance.bLockZTranslation = false;
+	}
+	return;
 }

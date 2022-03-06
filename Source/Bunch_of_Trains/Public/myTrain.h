@@ -41,6 +41,7 @@ private:
 	float lockedAxisVal;
 	float GetLockedAxis(int Axis);
 	FVector ImpulseVector(float Gravity);
+	void BlockAxis(int forward);
 
 public:	
 	// Called every frame
