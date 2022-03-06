@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+//#include "myTrain.h"
 #include "trainMaster.generated.h"
 
 UCLASS()
@@ -14,10 +15,13 @@ class BUNCH_OF_TRAINS_API AtrainMaster : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AtrainMaster();
-	UPROPERTY(EditAnywhere)
-		UStaticMesh* Train; //Static mesh used for the train model
+	//UPROPERTY(EditAnywhere)
+	//	UStaticMesh* Train; //Static mesh used for the train model
+	
 	UPROPERTY(EditAnywhere, Category = "TrainStart")
-		TArray<UStaticMesh*> LaneStarts;
+		TArray<AActor*> LaneStarts;
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		float Velocity;
 	UPROPERTY(EditAnywhere, Category = "Setup")
 		/// -+1 = -+x, -+2 = -+y, -+3 = -+z
 		int forwardDirection;
@@ -33,7 +37,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	void SpawnTrain(FTransform Trans, float Velocity, bool Active = 1);
+	//TArray<AmyTrain> Trains;
+	//AmyTrain Train;
+	//TSubclassOf<AActor> myTrainActor;
+	void SpawnTrain(int Lane, float vel, bool Active, bool Starting);
 	UStaticMeshComponent* myMesh;
 
 };

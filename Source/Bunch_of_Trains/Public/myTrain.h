@@ -16,12 +16,14 @@ class BUNCH_OF_TRAINS_API AmyTrain : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AmyTrain();
-	AmyTrain(float vel, int VerticalAxis, int Forward);
+	AmyTrain(float vel, int forward, FVector pos);
 
 	//UStaticMeshComponent* myMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("trainMesh"));
 
 	UStaticMeshComponent* myMesh;
 
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		AActor* Player;
 	//UPROPERTY(BlueprintReadWrite)
 		//UStaticMeshComponent* myMesh;
 
@@ -42,6 +44,7 @@ private:
 	float GetLockedAxis(int Axis);
 	FVector ImpulseVector(float Gravity);
 	void BlockAxis(int forward);
+	void SetupMesh(FVector trans);
 
 public:	
 	// Called every frame
