@@ -8,23 +8,20 @@ AmyTrain::AmyTrain()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	/*myMesh->CreateDefaultSubobject<UStaticMeshComponent>(TEXT("myMesh"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> FoundMesh(TEXT("/Game/Bunch_of_Trains/Meshes/Train.Mesh"));
-	if (FoundMesh.Succeeded())
-	{
-		myMesh->SetStaticMesh(FoundMesh.Object);
-	}
-	RootComponent = myMesh;*/
-
-	UStaticMeshComponent* myMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("trainMesh"));
+	//Set's up the actor's mesh
+	/*UStaticMeshComponent* */myMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("trainMesh"));
 	myMesh->SetupAttachment(RootComponent);
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> myMeshFinder(TEXT("/Game/Bunch_of_Trains/Meshes/Train.Train"));
-	if (myMeshFinder.Succeeded())
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> myMeshFinder(TEXT("/Game/Bunch_of_Trains/Meshes/Train.Train")); //Obtains the static mesh from the content browser
+	if (myMeshFinder.Succeeded()) //If mesh exists, then...
 	{
-		myMesh->SetStaticMesh(myMeshFinder.Object);
+		myMesh->SetStaticMesh(myMeshFinder.Object); //Applies mesh
+		//Adjusts mesh properties
 		myMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
 		myMesh->SetWorldScale3D(FVector(1.f));
+		//myMesh->SetSimulatePhysics(true);
+		myMesh->SetEnableGravity(false);
+		//myMesh->AddImpulse(FVector(1.0f, 0.0f, 0.0f));
 	}
 
 }
@@ -33,12 +30,14 @@ AmyTrain::AmyTrain()
 void AmyTrain::BeginPlay()
 {
 	Super::BeginPlay();
+	//myMesh->AddImpulse(FVector(2.0f, 1.0f, 1.0f) * myMesh->GetMass());
+
 }
 
 // Called every frame
 void AmyTrain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	myMesh->AddImpulse(FVector(-8.0f, 0.0f, 0.0f) * myMesh->GetMass());
 }
 

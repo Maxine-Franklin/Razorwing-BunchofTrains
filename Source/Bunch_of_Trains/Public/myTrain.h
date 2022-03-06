@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/PrimitiveComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "myTrain.generated.h"
 
@@ -15,6 +16,11 @@ class BUNCH_OF_TRAINS_API AmyTrain : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AmyTrain();
+
+	//UStaticMeshComponent* myMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("trainMesh"));
+
+	UStaticMeshComponent* myMesh;
+
 	//UPROPERTY(BlueprintReadWrite)
 		//UStaticMeshComponent* myMesh;
 
@@ -25,6 +31,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+private:
+	float Velocity;
+	FTransform Transform;
 
 public:	
 	// Called every frame
