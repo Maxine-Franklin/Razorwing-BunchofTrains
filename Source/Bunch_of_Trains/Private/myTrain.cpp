@@ -8,6 +8,8 @@ AmyTrain::AmyTrain()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Velocity = 10.0f;
+
 	//Set's up the actor's mesh
 	/*UStaticMeshComponent* */myMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("trainMesh"));
 	myMesh->SetupAttachment(RootComponent);
@@ -23,7 +25,11 @@ AmyTrain::AmyTrain()
 		myMesh->SetEnableGravity(false);
 		//myMesh->AddImpulse(FVector(1.0f, 0.0f, 0.0f));
 	}
+}
 
+AmyTrain::AmyTrain(float vel)
+{
+	Velocity = vel;
 }
 
 // Called when the game starts or when spawned
@@ -38,6 +44,6 @@ void AmyTrain::BeginPlay()
 void AmyTrain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	myMesh->AddImpulse(FVector(-8.0f, 0.0f, 0.0f) * myMesh->GetMass());
+	myMesh->AddImpulse(FVector(-Velocity, 0.0f, 0.0f) * myMesh->GetMass());
 }
 

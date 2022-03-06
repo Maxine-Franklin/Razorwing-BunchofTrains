@@ -16,6 +16,7 @@ class BUNCH_OF_TRAINS_API AmyTrain : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AmyTrain();
+	AmyTrain(float vel);
 
 	//UStaticMeshComponent* myMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("trainMesh"));
 
